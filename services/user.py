@@ -12,18 +12,11 @@ def create_user(
 ) -> User:
     new_user = get_user_model().objects.create_user(
         username=username,
-        password=password
+        password=password,
+        email=email,
+        first_name=first_name,
+        last_name=last_name,
     )
-
-    if email:
-        new_user.email = email
-
-    if first_name:
-        new_user.first_name = first_name
-
-    if last_name:
-        new_user.last_name = last_name
-
     return new_user
 
 
