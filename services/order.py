@@ -5,12 +5,12 @@ from django.db.models import QuerySet
 from db.models import Order, Ticket
 
 
+@transaction.atomic
 def create_order(
         tickets: list[dict],
         username: str,
         date: str = None
 ) -> Order:
-    with transaction.atomic():
         user = get_user_model().objects.get(username=username)
         order = Order.objects.create(user=user)
 
@@ -26,13 +26,13 @@ def create_order(
                 seat=ticket["seat"]
             )
 
-    return order
+        return order
 
 
-def get_orders(username: str = None) -> QuerySet:
+def get_orders(username: str = None) -> QuerySet[Order]:
     query_set = Order.objects.all()
 
     if username:
-        query_set = Order.objects.filter(user__username=username)
+        query_set = query_set.filter(user__username=username)
 
     return query_set
